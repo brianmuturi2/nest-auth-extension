@@ -5,6 +5,7 @@ import { SignInDto } from './dto/sign-in/sign-in.dto';
 import { Response } from 'express';
 import { Auth } from './decorators/auth.decorator';
 import { AuthType } from './enums/auth-type.enum';
+import { RefreshTokenDto } from './dto/sign-in/refresh-token.dto';
 
 @Auth(AuthType.None)
 @Controller('authentication')
@@ -31,5 +32,14 @@ export class AuthenticationController {
             httpOnly: true,
             sameSite: true
         })
+    }
+
+    @HttpCode(HttpStatus.OK)
+    @Post('refresh-token')
+    async refreshToken(
+        @Res({passthrough: true}) response: Response,
+        @Body() refreshTokenDto: RefreshTokenDto
+    ) {
+        return this.authenticationService.refreshToken(refreshTokenDto);
     }
 }
