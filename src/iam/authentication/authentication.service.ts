@@ -64,7 +64,12 @@ export class AuthenticationService {
         const [accessToken, refreshToken] = await Promise.all([
             this.signToken<Partial<ActiveUserData>>(
                 user.id, this.jwtConfiguration.accessTokenTtl,
-                { email: user.email, role: user.role }
+                {
+                    email: user.email,
+                    role: user.role,
+                    // WARNING (include only array of ids, if many, retrieve on request to have a lightweight token)
+                    permissions: user.permissions
+                }
             ),
             this.signToken(user.id, this.jwtConfiguration.refreshTokenTtl, {
                 refreshTokenId
